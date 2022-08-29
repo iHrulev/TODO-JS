@@ -1,5 +1,6 @@
 (function() {
-    let listArray = [];
+    let listArray = [],
+        listName = ''
     // создаем и возвращаем заголовок приложения
     function createAppTitle(title) {
         let appTitle = document.createElement('h2');
@@ -75,7 +76,7 @@
             for (const listItem of listArray) {
                 if (listItem.id === obj.id) listItem.done = !listItem.done
             }
-
+            saveList(listArray, listName)
         });
         deleteButton.addEventListener('click', function () {
             if (confirm('Вы уверены?')) {
@@ -84,7 +85,7 @@
                 for (let i=0; i<listArray.length; i++) {
                     if (listArray[i].id === obj.id) listArray.splice(i,1)
                 }
-
+                saveList(listArray, listName)
             }
         })
 
@@ -116,14 +117,31 @@
         return max + 1;
     }
 
-    function createTodoApp(container, title = 'Список дел') {
+    function saveList(arr, keyName) {
+        localStorage.setItem(keyName ,JSON.stringify(arr));
+    }
+
+    function createTodoApp(container, title = 'Список дел', keyName, defArray = []) {
         let todoAppTitle = createAppTitle(title);
         let todoItemForm = createTodoItemForm();
         let todoList = createTodoList();
 
+        listName = keyName;
+        listArray = defArray;
+
         container.append(todoAppTitle);
         container.append(todoItemForm.form);
         container.append(todoList);
+
+
+        let localData = localStorage.getItem(listName)
+
+        if (localData != null && localData !== '') listArray = JSON.parse(localData)
+
+        for (const itemList of listArray) {
+            let todoItem = createTodoItem(itemList);
+            todoList.append(todoItem.item);
+        }
 
 
         // браузер создает событие submit на форме по нажатию на Enter или на кнопку создания дела
@@ -147,7 +165,7 @@
 
             listArray.push(newItem);
 
-            console.log(listArray);
+            saveList(listArray, listName)
 
             // создаем и добавляем в список нвое дело с названием из поля для ввода
             todoList.append(todoItem.item);

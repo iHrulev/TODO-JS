@@ -8,7 +8,24 @@
     <script src="todo-app.js" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            createTodoApp(document.getElementById('todo-app'), 'Мои дела');
+            let defArray = [
+                {
+                    id: 1,
+                    name: 'todo-1',
+                    done: true,
+                    },
+                {
+                    id: 2,
+                    name: 'todo-2',
+                    done: false,
+                },
+                {
+                    id: 3,
+                    name: 'todo-3',
+                    done: true,
+                },
+            ]
+            createTodoApp(document.getElementById('todo-app'), 'Мои дела', 'my-List', defArray);
         });
     </script>
     <link rel="stylesheet" 
